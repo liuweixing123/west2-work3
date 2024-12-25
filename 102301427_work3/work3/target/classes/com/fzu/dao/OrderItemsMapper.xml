@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.ac.cn//DTD Mapper 3.0//EN"
+        "https://mybatis.ac.cn/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间 绑定一个一个对应的Dao/Mapeper接口-->
+<mapper namespace="com.fzu.dao.OrderItemsMapper">
+
+</mapper>

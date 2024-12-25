@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.ac.cn//DTD Mapper 3.0//EN"
+        "https://mybatis.ac.cn/dtd/mybatis-3-mapper.dtd">
+
+<!--命名空间 绑定一个一个对应的Dao/Mapeper接口-->
+<mapper namespace="com.fzu.dao.OrderMapper">
+    <resultMap id="OrderMap" type="Order">
+        <result column="oid" property="id"/>
+        <result column="order_price" property="price"/>
+        <result column="datetime" property="datetime"/>
+        <collection property="productList" ofType="Product">
+            <result column="pid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="product_price" property="price"/>
+            <result column="isdeleted" property="isdeleted"/>
+            <result column="quantity" property="quantity"/>
+        </collection>
+    </resultMap>
+    <select id="selectAll" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+    </select>
+
+    <select id="selectById" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+        where o.id=#{id}
+    </select>
+
+    <update id="updateOrder" parameterType="map">
+        update `order`
+        <set>
+            <if test="datetime!=null">
+                datetime=#{datetime},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="selectByPriceDesc" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+        Order by order_price desc
+    </select>
+
+    <select id="selectByPriceAsc" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+        Order by order_price asc
+    </select>
+
+    <select id="selectByDateDesc" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+        ORDER BY `datetime` DESC
+    </select>
+
+    <select id="selectByDateAsc" resultMap="OrderMap">
+        <!--联表查询-->
+        SELECT o.`id` AS oid,o.`datetime`,o.`price` order_price,p.`id` AS pid,p.`name`,
+        p.`price` product_price,p.`isdeleted`,ot.`quantity`
+        FROM `order` AS o
+        LEFT JOIN order_items AS ot
+        ON o.`id`=ot.`order_id`
+        INNER JOIN product AS p
+        ON ot.`product_id`=p.`id`
+        ORDER BY `datetime` asc
+    </select>
+</mapper>
